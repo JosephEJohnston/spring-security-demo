@@ -20,6 +20,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // 表单提交
         httpSecurity.formLogin()
+                // 参数必须和表单一致
+                //.usernameParameter("username123")
+                //.passwordParameter("password123")
                 // 当发现 /login 时认为是登录，必须和表单提交地址一样，去执行 UserDetailsServiceImpl#loadUserByUsername
                 .loginProcessingUrl("/login")
                 // 自定义登录页面
