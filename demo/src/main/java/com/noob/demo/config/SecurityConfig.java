@@ -32,17 +32,17 @@ public class SecurityConfig {
                 .loginPage("/login.html")
 
                 // 登录成功后跳转页面，必须是 Post 请求
-                //.successForwardUrl("/toMain")
+                .successForwardUrl("/toMain")
 
                 // 自定义认证成功跳转
                 // 不能和 successForwardUrl 共存
-                .successHandler(new MyAuthenticationSuccessHandler("https://www.baidu.com"))
+                //.successHandler(new MyAuthenticationSuccessHandler("https://www.baidu.com"))
 
                 // 登录失败后跳转页面，Post 请求
-                // .failureForwardUrl("/toError");
+                .failureForwardUrl("/toError");
 
                 // 不能和 failureForwardUrl 共存
-                .failureHandler(new MyAuthenticationFailureHandler("/error.html"));
+                //.failureHandler(new MyAuthenticationFailureHandler("/error.html"));
 
         // 授权认证
         httpSecurity.authorizeHttpRequests(
@@ -64,6 +64,10 @@ public class SecurityConfig {
 
                         // “记住我”，所有勾选了记住我的用户才可进行访问
                         //.anyRequest().rememberMe()
+
+                        // 访问对应资源需要对应权限，区分大小写
+                        //.requestMatchers("/main1.html").hasAuthority("admin")
+                        .requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
 
                         // 所有请求都必须被认证
                         .anyRequest().authenticated());
