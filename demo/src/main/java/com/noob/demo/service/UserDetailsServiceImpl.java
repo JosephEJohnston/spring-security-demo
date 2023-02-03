@@ -26,7 +26,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 2. 把查询出来的密码（注册时已经加密过）进行解析，或者直接把密码放入构造方法
         String password = passwordEncoder.encode("123");
 
+        // 带 ROLE_ 的是角色，否则是权限
         return new User(username, password, AuthorityUtils
-                .commaSeparatedStringToAuthorityList("admin,normal"));
+                .commaSeparatedStringToAuthorityList("admin,normal,ROLE_abc"));
     }
 }

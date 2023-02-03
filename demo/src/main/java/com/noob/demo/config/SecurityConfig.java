@@ -67,7 +67,11 @@ public class SecurityConfig {
 
                         // 访问对应资源需要对应权限，区分大小写
                         //.requestMatchers("/main1.html").hasAuthority("admin")
-                        .requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
+                        //.requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
+
+                        // 访问对应资源需要角色，区分大小写
+                        .requestMatchers("/main1.html").hasRole("abc")
+                        .requestMatchers("/main1.html").hasAnyRole("abc", "def")
 
                         // 所有请求都必须被认证
                         .anyRequest().authenticated());
