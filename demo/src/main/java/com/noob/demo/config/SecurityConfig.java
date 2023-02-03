@@ -2,12 +2,17 @@ package com.noob.demo.config;
 
 import com.noob.demo.handle.MyAuthenticationFailureHandler;
 import com.noob.demo.handle.MyAuthenticationSuccessHandler;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -70,8 +75,10 @@ public class SecurityConfig {
                         //.requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
 
                         // 访问对应资源需要角色，区分大小写
-                        .requestMatchers("/main1.html").hasRole("abc")
-                        .requestMatchers("/main1.html").hasAnyRole("abc", "def")
+                        //.requestMatchers("/main1.html").hasRole("abc")
+                        //.requestMatchers("/main1.html").hasAnyRole("abc", "def")
+
+                        .anyRequest().access(hasIpAddress("127.0.0.1"))
 
                         // 所有请求都必须被认证
                         .anyRequest().authenticated());
@@ -81,5 +88,13 @@ public class SecurityConfig {
         httpSecurity.csrf().disable();
 
         return httpSecurity.build();
+    }
+
+    private static AuthorizationManager<RequestAuthorizationContext> hasIpAddress(String ipAddress) {
+        IpAddressMatcher ipAddressMatcher = new IpAddressMatcher(ipAddress);
+        return (authentication, context) -> {
+            HttpServletRequest request = context.getRequest();
+            return new AuthorizationDecision(ipAddressMatcher.matches(request));
+        };
     }
 }

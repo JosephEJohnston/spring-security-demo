@@ -20,6 +20,8 @@ public class MyAuthenticationSuccessHandler implements AuthenticationSuccessHand
     // 认证成功后跳转
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+        System.out.println(request.getRemoteAddr());
+
         User user = (User) authentication.getPrincipal();
 
         System.out.println(user.getUsername());
