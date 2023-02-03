@@ -49,6 +49,22 @@ public class SecurityConfig {
                 (auth) -> auth
                         // login.html 即 error.html 不需要被认证
                         .requestMatchers("/login.html", "/error.html", "/toError").permitAll()
+
+                        //.requestMatchers("/js/**", "/css/**", "/image/**").permitAll()
+                        //.requestMatchers("/**/*.png").permitAll()
+
+                        // 允许匿名访问，请求进入拦截链中，略类似 permitAll
+                        //.anyRequest().anonymous()
+
+                        // 拒绝所有对应访问请求
+                        //.anyRequest().denyAll()
+
+                        // 完全认证，勾选记住我也不能给你访问，只能一步步通过用户名密码登录后才可访问
+                        //.anyRequest().fullyAuthenticated()
+
+                        // “记住我”，所有勾选了记住我的用户才可进行访问
+                        //.anyRequest().rememberMe()
+
                         // 所有请求都必须被认证
                         .anyRequest().authenticated());
                 // .httpBasic(Customizer.withDefaults());
