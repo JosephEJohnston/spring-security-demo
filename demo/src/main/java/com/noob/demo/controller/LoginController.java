@@ -12,10 +12,10 @@ public class LoginController {
         return "redirect:main.html";
     }
 
-    @PostMapping("login")
-    public String login() {
-        System.out.println("执行登录方法");
+    @PostMapping("/toMain")
+    public String toMain() {
         return "redirect:main.html";
     }
+
 
 }
