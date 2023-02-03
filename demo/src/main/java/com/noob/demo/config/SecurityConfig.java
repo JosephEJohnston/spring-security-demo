@@ -1,5 +1,6 @@
 package com.noob.demo.config;
 
+import com.noob.demo.handle.MyAuthenticationFailureHandler;
 import com.noob.demo.handle.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +39,10 @@ public class SecurityConfig {
                 .successHandler(new MyAuthenticationSuccessHandler("https://www.baidu.com"))
 
                 // 登录失败后跳转页面，Post 请求
-                .failureForwardUrl("/toError");
+                // .failureForwardUrl("/toError");
+
+                // 不能和 failureForwardUrl 共存
+                .failureHandler(new MyAuthenticationFailureHandler("/error.html"));
 
         // 授权认证
         httpSecurity.authorizeHttpRequests(
