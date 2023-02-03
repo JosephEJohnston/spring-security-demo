@@ -1,7 +1,9 @@
 package com.noob.demo.config;
 
+import com.noob.demo.handle.MyAccessDeniedHandler;
 import com.noob.demo.handle.MyAuthenticationFailureHandler;
 import com.noob.demo.handle.MyAuthenticationSuccessHandler;
+import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +18,9 @@ import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 @Configuration
 public class SecurityConfig {
+
+    @Resource
+    private MyAccessDeniedHandler myAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -75,10 +80,10 @@ public class SecurityConfig {
                         //.requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
 
                         // 访问对应资源需要角色，区分大小写
-                        //.requestMatchers("/main1.html").hasRole("abc")
+                        .requestMatchers("/main1.html").hasRole("abce")
                         //.requestMatchers("/main1.html").hasAnyRole("abc", "def")
 
-                        .anyRequest().access(hasIpAddress("127.0.0.1"))
+                        //.anyRequest().access(hasIpAddress("127.0.0.1"))
 
                         // 所有请求都必须被认证
                         .anyRequest().authenticated());
@@ -86,6 +91,10 @@ public class SecurityConfig {
 
         // 关闭 csrf 防护
         httpSecurity.csrf().disable();
+
+        // 异常处理
+        httpSecurity.exceptionHandling()
+                .accessDeniedHandler(myAccessDeniedHandler);
 
         return httpSecurity.build();
     }
