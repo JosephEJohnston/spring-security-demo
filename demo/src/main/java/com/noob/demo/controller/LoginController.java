@@ -17,5 +17,8 @@ public class LoginController {
         return "redirect:main.html";
     }
 
-
+    @PostMapping("/toError")
+    public String toError() {
+        return "redirect:error.html";
+    }
 }

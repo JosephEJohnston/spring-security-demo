@@ -24,13 +24,16 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
                 // 自定义登录页面
                 .loginPage("/login.html")
-                // 登录成功后跳转页面，必须是 POST 请求
-                .successForwardUrl("/toMain");
+                // 登录成功后跳转页面，必须是 Post 请求
+                .successForwardUrl("/toMain")
+                // 登录失败后跳转页面，Post 请求
+                .failureForwardUrl("/toError");
 
         // 授权认证
         httpSecurity.authorizeHttpRequests(
-                // login.html 不需要被认证
-                (auth) -> auth.requestMatchers("/login.html").permitAll()
+                (auth) -> auth
+                        // login.html 即 error.html 不需要被认证
+                        .requestMatchers("/login.html", "/error.html", "/toError").permitAll()
                         // 所有请求都必须被认证
                         .anyRequest().authenticated());
                 // .httpBasic(Customizer.withDefaults());
