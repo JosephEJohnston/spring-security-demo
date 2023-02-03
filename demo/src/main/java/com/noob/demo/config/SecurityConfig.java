@@ -1,8 +1,8 @@
 package com.noob.demo.config;
 
+import com.noob.demo.handle.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,12 +23,20 @@ public class SecurityConfig {
                 // 参数必须和表单一致
                 //.usernameParameter("username123")
                 //.passwordParameter("password123")
+
                 // 当发现 /login 时认为是登录，必须和表单提交地址一样，去执行 UserDetailsServiceImpl#loadUserByUsername
                 .loginProcessingUrl("/login")
+
                 // 自定义登录页面
                 .loginPage("/login.html")
+
                 // 登录成功后跳转页面，必须是 Post 请求
-                .successForwardUrl("/toMain")
+                //.successForwardUrl("/toMain")
+
+                // 自定义认证成功跳转
+                // 不能和 successForwardUrl 共存
+                .successHandler(new MyAuthenticationSuccessHandler("https://www.baidu.com"))
+
                 // 登录失败后跳转页面，Post 请求
                 .failureForwardUrl("/toError");
 
