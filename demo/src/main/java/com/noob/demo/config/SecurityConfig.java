@@ -129,6 +129,13 @@ public class SecurityConfig {
                 // 持久层对象
                 .tokenRepository(persistentTokenRepository);
 
+        // 退出登录
+        httpSecurity.logout()
+                // 自定义退出接口名
+                //.logoutUrl("/user/logout")
+                // 退出登录跳转页面
+                .logoutSuccessUrl("/login.html");
+
         return httpSecurity.build();
     }
 
