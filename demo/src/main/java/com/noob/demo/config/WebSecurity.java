@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class WebSecurity {
-    public Boolean checkUserId(Authentication authentication, HttpServletRequest request) {
+    public Boolean check(Authentication authentication, HttpServletRequest request) {
         return true;
     }
 }

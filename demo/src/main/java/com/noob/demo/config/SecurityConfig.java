@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.DefaultHttpSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
@@ -21,11 +22,22 @@ import org.springframework.security.web.util.matcher.IpAddressMatcher;
 public class SecurityConfig {
 
     @Resource
+    private ApplicationContext applicationContext;
+
+    @Resource
     private MyAccessDeniedHandler myAccessDeniedHandler;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private WebExpressionAuthorizationManager getWebExpressionAuthorizationManager(final String expression) {
+        final var expressionHandler = new DefaultHttpSecurityExpressionHandler();
+        expressionHandler.setApplicationContext(applicationContext);
+        final var authorizationManager = new WebExpressionAuthorizationManager(expression);
+        authorizationManager.setExpressionHandler(expressionHandler);
+        return authorizationManager;
     }
 
     @Bean
@@ -91,8 +103,7 @@ public class SecurityConfig {
                          */
                         //.requestMatchers("").access(AuthenticatedAuthorizationManager.fullyAuthenticated())
 
-                        // 这个版本不好使
-                        .requestMatchers("/**").access(new WebExpressionAuthorizationManager("@webSecurity.check(authentication,request)")));
+                        .requestMatchers("/**").access(getWebExpressionAuthorizationManager("@webSecurity.check(authentication,request)")));
 
                         // 自定义方法权限控制
                         //.anyRequest().access(new WebExpressionAuthorizationManager("@myServiceImpl.hasPermission(request, authentication)")))
