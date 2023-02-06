@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+</head>
+<body>
+登录账号:<span sec:authentication="name">123</span><br/>
+登录账号:<span sec:authentication="principal.username">456</span><br/>
+凭证:<span sec:authentication="credentials">456</span><br/>
+权限和角色:<span sec:authentication="authorities">456</span><br/>
+客户端地址:<span sec:authentication="details.remoteAddress">456</span><br/>
+sessionId:<span sec:authentication="details.sessionId">456</span><br/>
+</body>
+</html>

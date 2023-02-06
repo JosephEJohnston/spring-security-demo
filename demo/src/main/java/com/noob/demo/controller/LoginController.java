@@ -24,4 +24,9 @@ public class LoginController {
     public String toError() {
         return "redirect:error.html";
     }
+
+    @GetMapping("demo")
+    public String demo() {
+        return "demo";
+    }
 }
