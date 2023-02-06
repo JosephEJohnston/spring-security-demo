@@ -32,4 +32,10 @@ package com.noob.demo;
  *
  * 刷新令牌：
  *  见图：static/刷新令牌.png
+ *
+ * 授权服务器：
+ *  static/授权服务器.png
+ *
+ * 架构：
+ *  static/SpringOauth2架构.png
  */
