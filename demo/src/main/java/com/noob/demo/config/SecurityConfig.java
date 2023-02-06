@@ -1,10 +1,10 @@
 package com.noob.demo.config;
 
 import com.noob.demo.handle.MyAccessDeniedHandler;
-import com.noob.demo.handle.MyAuthenticationFailureHandler;
-import com.noob.demo.handle.MyAuthenticationSuccessHandler;
+import com.noob.demo.service.MyService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
@@ -20,7 +21,13 @@ import org.springframework.security.web.util.matcher.IpAddressMatcher;
 public class SecurityConfig {
 
     @Resource
+    private ApplicationContext applicationContext;
+
+    @Resource
     private MyAccessDeniedHandler myAccessDeniedHandler;
+
+    @Resource
+    private MyService myService;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {
@@ -58,7 +65,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 (auth) -> auth
                         // login.html 即 error.html 不需要被认证
-                        .requestMatchers("/login.html", "/error.html", "/toError").permitAll()
+                        //.requestMatchers("/login.html", "/error.html", "/toError").permitAll()
 
                         //.requestMatchers("/js/**", "/css/**", "/image/**").permitAll()
                         //.requestMatchers("/**/*.png").permitAll()
@@ -80,13 +87,24 @@ public class SecurityConfig {
                         //.requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
 
                         // 访问对应资源需要角色，区分大小写
-                        .requestMatchers("/main1.html").hasRole("abce")
+                        //.requestMatchers("/main1.html").hasRole("abce")
                         //.requestMatchers("/main1.html").hasAnyRole("abc", "def")
 
                         //.anyRequest().access(hasIpAddress("127.0.0.1"))
 
+                        /*
+                         * 这些 hasAuthority，denyAll 等等方法，底层都是 access
+                         */
+                        //.requestMatchers("").access(AuthenticatedAuthorizationManager.fullyAuthenticated())
+
+                        // 这个版本不好使
+                        .requestMatchers("/**").access(new WebExpressionAuthorizationManager("@webSecurity.check(authentication,request)")));
+
+                        // 自定义方法权限控制
+                        //.anyRequest().access(new WebExpressionAuthorizationManager("@myServiceImpl.hasPermission(request, authentication)")))
+
                         // 所有请求都必须被认证
-                        .anyRequest().authenticated());
+                        //.anyRequest().authenticated());
                 // .httpBasic(Customizer.withDefaults());
 
         // 关闭 csrf 防护
