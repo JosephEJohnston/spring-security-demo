@@ -1,7 +1,6 @@
 package com.noob.demo.config;
 
 import com.noob.demo.handle.MyAccessDeniedHandler;
-import com.noob.demo.service.MyService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.ApplicationContext;
@@ -71,10 +70,9 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 (auth) -> auth
                         // login.html 即 error.html 不需要被认证
-                        //.requestMatchers("/login.html", "/error.html", "/toError").permitAll()
+                        .requestMatchers("/login.html", "/error.html", "/toError").permitAll()
 
-                        //.requestMatchers("/js/**", "/css/**", "/image/**").permitAll()
-                        //.requestMatchers("/**/*.png").permitAll()
+                        .requestMatchers("/js/**", "/css/**", "/image/**").permitAll()
 
                         // 允许匿名访问，请求进入拦截链中，略类似 permitAll
                         //.anyRequest().anonymous()
@@ -93,7 +91,7 @@ public class SecurityConfig {
                         //.requestMatchers("/main1.html").hasAnyAuthority("admin", "normal")
 
                         // 访问对应资源需要角色，区分大小写
-                        //.requestMatchers("/main1.html").hasRole("abce")
+                        //.requestMatchers("/main1.html").hasRole("abc")
                         //.requestMatchers("/main1.html").hasAnyRole("abc", "def")
 
                         //.anyRequest().access(hasIpAddress("127.0.0.1"))
@@ -103,13 +101,13 @@ public class SecurityConfig {
                          */
                         //.requestMatchers("").access(AuthenticatedAuthorizationManager.fullyAuthenticated())
 
-                        .requestMatchers("/**").access(getWebExpressionAuthorizationManager("@webSecurity.check(authentication,request)")));
+                        //.requestMatchers("/**").access(getWebExpressionAuthorizationManager("@webSecurity.check(authentication,request)")));
 
                         // 自定义方法权限控制
                         //.anyRequest().access(new WebExpressionAuthorizationManager("@myServiceImpl.hasPermission(request, authentication)")))
 
                         // 所有请求都必须被认证
-                        //.anyRequest().authenticated());
+                        .anyRequest().authenticated());
                 // .httpBasic(Customizer.withDefaults());
 
         // 关闭 csrf 防护
