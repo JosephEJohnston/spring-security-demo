@@ -15,6 +15,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Resource
     private PasswordEncoder passwordEncoder;
 
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 1. 查询数据库判断用户名是否存在

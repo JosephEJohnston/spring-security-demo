@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.expression.DefaultHttpSecurityExpressionHandler;
 import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.util.matcher.IpAddressMatcher;
 
 @Configuration
@@ -26,10 +26,11 @@ public class SecurityConfig {
     @Resource
     private MyAccessDeniedHandler myAccessDeniedHandler;
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    @Resource
+    private UserDetailsService userDetailsService;
+
+    @Resource
+    private PersistentTokenRepository persistentTokenRepository;
 
     private WebExpressionAuthorizationManager getWebExpressionAuthorizationManager(final String expression) {
         final var expressionHandler = new DefaultHttpSecurityExpressionHandler();
@@ -116,6 +117,17 @@ public class SecurityConfig {
         // 异常处理
         httpSecurity.exceptionHandling()
                 .accessDeniedHandler(myAccessDeniedHandler);
+
+        // RememberMe 功能
+        httpSecurity.rememberMe()
+                // 失效时间，单位秒
+                .tokenValiditySeconds(60)
+                // 设置参数
+                //.rememberMeParameter("")
+                // 自定义登录逻辑
+                .userDetailsService(userDetailsService)
+                // 持久层对象
+                .tokenRepository(persistentTokenRepository);
 
         return httpSecurity.build();
     }
