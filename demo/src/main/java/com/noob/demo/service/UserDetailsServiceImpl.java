@@ -30,6 +30,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         // 带 ROLE_ 的是角色，否则是权限
         return new User(username, password, AuthorityUtils
-                .commaSeparatedStringToAuthorityList("admin,normal,ROLE_abc"));
+                .commaSeparatedStringToAuthorityList("admin,normal,ROLE_abc,/insert,/delete"));
     }
 }

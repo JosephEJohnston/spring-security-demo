@@ -13,5 +13,18 @@
 权限和角色:<span sec:authentication="authorities">456</span><br/>
 客户端地址:<span sec:authentication="details.remoteAddress">456</span><br/>
 sessionId:<span sec:authentication="details.sessionId">456</span><br/>
+
+<br />
+通过权限判断：
+<button sec:authroize="hasAuthority('/insert')">新增</button>
+<button sec:authroize="hasAuthority('/delete')">删除</button>
+<button sec:authroize="hasAuthority('/update')">修改</button>
+<button sec:authroize="hasAuthority('/select')">查看</button>
+<br />
+通过角色判断：
+<button sec:authroize="hasRole('abc')">新增</button>
+<button sec:authroize="hasRole('abc')">删除</button>
+<button sec:authroize="hasRole('abc')">修改</button>
+<button sec:authroize="hasRole('abc')">查看</button>
 </body>
 </html>
