@@ -14,3 +14,9 @@
  */
 
 package com.noob.demo;
+
+/*
+ * Oauth2 认证：
+ * Oauth2 提供了用户认证（开放资源授权）的标准
+ * 见图：static/Oauth2.png
+ */
