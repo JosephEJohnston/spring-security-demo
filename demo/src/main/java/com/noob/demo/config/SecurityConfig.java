@@ -21,13 +21,7 @@ import org.springframework.security.web.util.matcher.IpAddressMatcher;
 public class SecurityConfig {
 
     @Resource
-    private ApplicationContext applicationContext;
-
-    @Resource
     private MyAccessDeniedHandler myAccessDeniedHandler;
-
-    @Resource
-    private MyService myService;
 
     @Bean
     public PasswordEncoder getPasswordEncoder() {

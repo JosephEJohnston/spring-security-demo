@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
-@Service("myServiceImpl")
+@Service
 public class MyServiceImpl implements MyService {
 
     @Override
