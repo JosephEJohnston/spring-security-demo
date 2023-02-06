@@ -52,7 +52,8 @@ public class SecurityConfig {
                 .loginProcessingUrl("/login")
 
                 // 自定义登录页面
-                .loginPage("/login.html")
+                //.loginPage("/login.html")
+                .loginPage("/showLogin")
 
                 // 登录成功后跳转页面，必须是 Post 请求
                 .successForwardUrl("/toMain")
@@ -71,7 +72,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(
                 (auth) -> auth
                         // login.html 即 error.html 不需要被认证
-                        .requestMatchers("/login.html", "/error.html", "/toError").permitAll()
+                        .requestMatchers("/login.html", "/error.html", "/toError", "/showLogin").permitAll()
 
                         .requestMatchers("/js/**", "/css/**", "/image/**").permitAll()
 
@@ -112,7 +113,15 @@ public class SecurityConfig {
                 // .httpBasic(Customizer.withDefaults());
 
         // 关闭 csrf 防护
-        httpSecurity.csrf().disable();
+        /*
+         * CSRF(Cross-site request forgery) 跨站请求伪造
+         *      通过伪造用户请求访问受信任站点的非法请求访问
+         * 跨域：只要网络协议，ip 地址，端口中任何一个不相同就是跨域请求
+         * 在跨域的情况下，session id 可能被第三方恶意劫持
+         *      通过这个 session id 向服务端发起请求时，服务端会认为这个请求是合法的
+         */
+        // 启动后，要求请求参数携带 _csrf 参数，参数值为 token
+        // httpSecurity.csrf().disable();
 
         // 异常处理
         httpSecurity.exceptionHandling()
@@ -131,8 +140,12 @@ public class SecurityConfig {
 
         // 退出登录
         httpSecurity.logout()
+                // 内部实际调用 LogoutHandler
+                //.addLogoutHandler()
+
                 // 自定义退出接口名
                 //.logoutUrl("/user/logout")
+
                 // 退出登录跳转页面
                 .logoutSuccessUrl("/login.html");
 

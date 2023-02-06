@@ -29,4 +29,10 @@ public class LoginController {
     public String demo() {
         return "demo";
     }
+
+    // 页面跳转
+    @GetMapping("showLogin")
+    public String showLogin() {
+        return "login";
+    }
 }
